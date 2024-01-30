@@ -22,9 +22,9 @@ s3 = boto3.client(
 def upload_file(image_binary, file_name, content_type='image/jpeg'):
     """Upload a file to an S3 bucket
 
-    :param image_binary: Image binary file to upload
-    :param file_name: file_name. Will correspond to object key in S3
-    :return: aws_image_src: URL to image in S3
+    image_binary: Image binary file to upload
+    file_name: file_name. Will correspond to object key in S3
+    returns: aws_image_src: URL to image in S3
      """
 
     try:
