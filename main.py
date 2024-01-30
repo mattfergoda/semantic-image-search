@@ -38,10 +38,7 @@ def get_images(
     limit: int = 50,
     db: Session = Depends(get_db)):
 
-    text_embedding = clip.get_text_embedding(q) if q else None
-
-    images = crud.get_images(limit=limit, text_embedding=text_embedding, db=db)
-    return images
+    return crud.get_images(limit=limit, search_term=q, db=db)
 
 @app.post("/images/", response_model=schemas.Image, status_code=201)
 def upload_image(
