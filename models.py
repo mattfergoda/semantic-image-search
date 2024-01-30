@@ -23,14 +23,15 @@ class Image(Base):
         primary_key=True)
 
     aws_image_src = Column(
-        String(100)
+        String(100),
+        nullable=False
     )
 
     exif_data = Column(
         JSON()
     )
 
-    embedding = mapped_column(Vector(3))
+    embedding = mapped_column(Vector(512))
 
     uploaded_at = Column(
         DateTime,

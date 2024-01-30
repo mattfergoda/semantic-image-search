@@ -12,7 +12,4 @@ SQLALCHEMY_DATABASE_URL = os.environ.get("SQLALCHEMY_DATABASE_URI")
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-with SessionLocal() as session:
-    session.execute(text('CREATE EXTENSION IF NOT EXISTS vector'))
-
 Base = declarative_base()

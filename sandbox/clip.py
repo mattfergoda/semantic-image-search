@@ -9,7 +9,7 @@ model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 
-url = "https://mf-pixly.s3.us-west-2.amazonaws.com/fuji.jpg"
+url = "https://semantic-pic.s3.us-west-2.amazonaws.com/sichuan"
 
 image = Image.open(requests.get(url, stream=True).raw)
 

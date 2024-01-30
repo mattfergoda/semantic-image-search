@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from pydantic import BaseModel
-from numpy.typing import NDArray
 
 
 class ImageBase(BaseModel):
@@ -11,6 +10,7 @@ class ImageBase(BaseModel):
 class ImageCreate(ImageBase):
     aws_image_src : str
     exif_data: object
+    embedding: list
 
 
 class Image(ImageBase):
