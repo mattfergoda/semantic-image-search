@@ -24,18 +24,28 @@ image_embeds = model.get_image_features(**image_inputs)
 normed_image_embeds = div(image_embeds, vector_norm(image_embeds))
 # print("normed_image_embeds = ", normed_image_embeds)
 
-bad_text_inputs = processor(
-    text="A picture of a feather",
+good_text_inputs = processor(
+    text="A feather",
     return_tensors="pt"
 )
 
-good_text_embeds = model.get_text_features(**bad_text_inputs)
+good_text_embeds = model.get_text_features(**good_text_inputs)
 #print("good_text_embeds = ", good_text_embeds)
 normed_good_text_embeds = div(good_text_embeds, vector_norm(good_text_embeds))
 #print("normed_good_text_embeds = ", normed_good_text_embeds)
 
+okay_text_inputs = processor(
+    text="A long skinny object",
+    return_tensors="pt"
+)
+
+okay_text_embeds = model.get_text_features(**okay_text_inputs)
+#print("okay_text_embeds = ", okay_text_embeds)
+normed_okay_text_embeds = div(okay_text_embeds, vector_norm(okay_text_embeds))
+#print("normed_okay_text_embeds = ", normed_okay_text_embeds)
+
 bad_text_inputs = processor(
-    text="A picture of a man on a bike",
+    text="A man on a bike",
     return_tensors="pt"
 )
 
@@ -44,8 +54,22 @@ bad_text_embeds = model.get_text_features(**bad_text_inputs)
 normed_bad_text_embeds = div(bad_text_embeds, vector_norm(bad_text_embeds))
 #print("normed_bad_text_embeds = ", normed_bad_text_embeds)
 
+terrible_text_inputs = processor(
+    text="Two people standing in front of a big beautiful rainbow",
+    return_tensors="pt"
+)
+
+terrible_text_embeds = model.get_text_features(**terrible_text_inputs)
+#print("terrible_text_embeds = ", terrible_text_embeds)
+normed_terrible_text_embeds = div(terrible_text_embeds, vector_norm(terrible_text_embeds))
+#print("normed_terrible_text_embeds = ", normed_terrible_text_embeds)
+
 good_text_sim = inner(normed_good_text_embeds, normed_image_embeds)
+okay_text_sim = inner(normed_okay_text_embeds, normed_image_embeds)
 bad_text_sim = inner(normed_bad_text_embeds, normed_image_embeds)
+terrible_text_sim = inner(normed_terrible_text_embeds, normed_image_embeds)
 
 print("good_text_sim = ", good_text_sim)
+print("okay_text_sim = ", okay_text_sim)
 print("bad_text_sim = ", bad_text_sim)
+print("terrible_text_sim = ", terrible_text_sim)
