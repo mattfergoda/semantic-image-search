@@ -1,12 +1,13 @@
 from typing import Annotated
 
 from fastapi import (
-    Depends, 
     FastAPI, 
+    Depends, 
     HTTPException, 
     Query, 
-    UploadFile, 
-    Body, 
+    Body,
+    Header,
+    UploadFile,  
     status
 )
 from sqlalchemy.orm import Session
@@ -44,10 +45,10 @@ def get_images(
 def upload_image(
     file: UploadFile, 
     image_name: Annotated[str, Body()],
-    admin_pw: Annotated[str, Body()], 
+    hashed_pw: Annotated[str, Header(alias="HTTPBearer")], 
     db: Session = Depends(get_db)):
 
-    if not auth.verify_admin(admin_pw):
+    if not auth.verify_admin(hashed_pw):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized"
@@ -72,3 +73,23 @@ def upload_image(
     image = crud.create_image(image=image, db=db)
 
     return image
+
+@app.delete("/images/{image_name}")
+def delete_image(
+    image_name: str, 
+    hashed_pw: Annotated[str, Header(alias="HTTPBearer")],
+    db: Session = Depends(get_db)):
+    
+    if not auth.verify_admin(hashed_pw):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized"
+        )
+    
+    if not crud.get_image(image_name=image_name, db=db):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    crud.delete_image(image_name=image_name, db=db)
+    bucket.delete_file(image_name)
+
+    return {"Message": "Successfully deleted file."}

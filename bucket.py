@@ -28,7 +28,6 @@ def upload_file(image_binary, file_name, content_type='image/jpeg'):
      """
 
     try:
-        
         response = s3.put_object(
             Body=image_binary,
             Bucket=BUCKET_NAME,
@@ -44,9 +43,21 @@ def upload_file(image_binary, file_name, content_type='image/jpeg'):
 
     return aws_image_src
 
-
 def get_s3_file(file_name):
     """ Takes in a file name , returns StreamingBody object """
 
     response = s3.get_object(Bucket=BUCKET_NAME, Key=file_name)
     return response["Body"]
+
+def delete_file(file_name):
+    """Delete an image from an S3 bucket"""
+
+    try:
+        response = s3.delete_object(
+            Bucket=BUCKET_NAME,
+            Key=file_name
+        )
+
+    except ClientError as e:
+        logging.error(e)
+        return
