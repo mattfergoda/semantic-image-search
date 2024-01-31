@@ -33,6 +33,15 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/images/{image_name}", response_model=schemas.Image)
+def get_image(image_name: str, db: Session = Depends(get_db)):
+    
+    image = crud.get_image(image_name=image_name, db=db)
+    if not image:
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return image
+
 @app.get("/images/", response_model=list[schemas.Image])
 def get_images(
     q: Annotated[str | None, Query(max_length=100)] = None,
