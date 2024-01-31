@@ -1,4 +1,3 @@
-from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 import schemas
@@ -9,11 +8,13 @@ from models import Image
 def get_image(db: Session, image_name: str):
     """Get one image based on its name"""
 
-    return (
+    image = (
         db.query(Image)
         .filter(Image.name == image_name)
         .first()
     )
+
+    return image
 
 def get_images(db: Session, limit: int = 50, search_term = None):
     """
@@ -26,14 +27,14 @@ def get_images(db: Session, limit: int = 50, search_term = None):
 
     if embedding:
         return (
-            db.scalars(select(Image)
-                .order_by(Image.embedding.max_inner_product(embedding))
-                .limit(limit))
+            db.query(Image)
+            .order_by(Image.embedding.max_inner_product(embedding))
+            .limit(limit)
         )
     return (
-            db.scalars(select(Image)
-                .order_by(Image.uploaded_at.desc())
-                .limit(limit))
+        db.query(Image)
+        .order_by(Image.uploaded_at.desc())
+        .limit(limit)
         )
 
 def create_image(db: Session, image: schemas.ImageCreate):
