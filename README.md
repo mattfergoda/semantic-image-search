@@ -29,3 +29,4 @@ BUCKET_NAME = <your-aws-s3-bucket-name>
 - Add tests.
 - Add a license.
 - Add a docker file for deployment.
+- Implement logging framework.
