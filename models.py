@@ -3,6 +3,9 @@ from sqlalchemy.orm import mapped_column
 from pgvector.sqlalchemy import Vector
 
 from database import Base, SessionLocal
+from clip import MODEL as CLIP
+
+EMBEDDING_SIZE = CLIP.projection_dim
 
 
 # class User(Base):
@@ -31,7 +34,7 @@ class Image(Base):
         JSON()
     )
 
-    embedding = mapped_column(Vector(512))
+    embedding = mapped_column(Vector(EMBEDDING_SIZE))
 
     uploaded_at = Column(
         DateTime,
