@@ -1,11 +1,11 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
+from pgvector.sqlalchemy
 import numpy as np
-from pgvector.sqlalchemy import Vector
 
 from database import Base
-from models import Image, EMBEDDING_SIZE, Vector
+from models import Image, EMBEDDING_SIZE
 import schemas
 import crud
 
@@ -21,6 +21,8 @@ TestingSessionLocal = sessionmaker(
 
 
 class TestCRUD:
+    """Tests for CRUD database operations."""
+    
     @pytest.fixture
     def session(self):
         Base.metadata.create_all(bind=engine)
