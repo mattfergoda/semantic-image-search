@@ -7,7 +7,7 @@ from transformers import CLIPProcessor, CLIPModel
 
 MODEL = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 PROCESSOR = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
-
+EMBEDDING_SIZE = MODEL.projection_dim
 
 def get_text_embedding(text):
     """ Takes in text and returns normalized CLIP embedding."""
