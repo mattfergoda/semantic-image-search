@@ -16,14 +16,16 @@ import crud
 import models
 import schemas
 import image_utils
-import bucket
 import clip
 import auth
 from database import SessionLocal, engine
+from bucket import Bucket
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+bucket = Bucket()
 
 
 def get_db():

@@ -2,10 +2,8 @@ from sqlalchemy import Column, String, JSON, DateTime, func
 from sqlalchemy.orm import mapped_column
 from pgvector.sqlalchemy import Vector
 
-from database import Base, SessionLocal
-from clip import MODEL as CLIP
-
-EMBEDDING_SIZE = CLIP.projection_dim
+from database import Base
+from clip import EMBEDDING_SIZE
 
 
 # class User(Base):
