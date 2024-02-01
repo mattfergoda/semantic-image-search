@@ -43,7 +43,7 @@ def upload_file(image_binary, file_name, content_type='image/jpeg'):
 
     return aws_image_src
 
-def get_s3_file(file_name):
+def get_file(file_name):
     """ Takes in a file name , returns StreamingBody object """
 
     response = s3.get_object(Bucket=BUCKET_NAME, Key=file_name)
