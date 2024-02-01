@@ -4,7 +4,8 @@ from sqlalchemy.orm import sessionmaker, Session
 import numpy as np
 
 from database import Base
-from models import Image, EMBEDDING_SIZE
+from models import Image
+from clip import EMBEDDING_SIZE
 import schemas
 import crud
 
