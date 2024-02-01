@@ -1,8 +1,9 @@
 import os
+from unittest import mock
 
 import pytest
 
-import bucket
+from bucket import Bucket
 
 REGION = os.environ['REGION']
 BUCKET_NAME = os.environ['BUCKET_NAME']
@@ -14,6 +15,8 @@ class TestBucket:
     def setup_method(self):
         """Add some photos to the bucket."""
 
+        bucket = Bucket()
+  
         with open("tests/images/Fujifilm_FinePix_E500.jpg", "rb") as image:
             file = image.read()
             image_bytes = bytearray(file)
@@ -26,9 +29,11 @@ class TestBucket:
 
         bucket.upload_file(image_bytes, "pentax_test")
     
-    def test_upload_file(self):
+    def test_upload_file_ok(self):
         """Test uploading an image to an S3 bucket."""
 
+        bucket = Bucket()
+       
         with open("tests/images/Nikon_D70.jpg", "rb") as image:
             file = image.read()
             image_bytes = bytearray(file)
@@ -55,13 +60,24 @@ class TestBucket:
         # Clean up
         bucket.delete_file(image_name)
 
+    def test_upload_bad_credentials(self):
+        """Test attempting to upload with bad credentials."""
+
+        bucket = Bucket(aws_access_key="foo", aws_secret_access_key="bar")
+
+        # Upload image
+        assert bucket.upload_file(bytearray(), "foo") == None
+
     def test_get_file(self):
         """Test getting a file."""
 
+        bucket = Bucket()
         assert bucket.get_file("fuji_test")
 
-    def test_delete_file(self):
+    def test_delete_file_ok(self):
         """Test deleting a file"""
+
+        bucket = Bucket()
 
         image_name = "fuji_test"
 
@@ -76,7 +92,17 @@ class TestBucket:
             bucket.get_file(image_name)
         assert e_info.typename == "NoSuchKey"
 
+    def test_delete_file_bad_credentials(self):
+        """Test attempting to delete a file with bad credentials."""
+
+        bucket = Bucket(aws_access_key="foo", aws_secret_access_key="bar")
+
+        # Upload image
+        assert bucket.delete_file("pentax_test") == None
+
     def teardown_method(self):
         """Delete remaining images."""
+
+        bucket = Bucket()
 
         bucket.delete_file("pentax_test")        
