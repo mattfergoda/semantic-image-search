@@ -7,58 +7,72 @@ import logging
 
 load_dotenv()
 
+
 AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
 AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 REGION = os.environ['REGION']
 BUCKET_NAME = os.environ['BUCKET_NAME']
 
 
-s3 = boto3.client(
-  "s3",
-  REGION,
-  aws_access_key_id=AWS_ACCESS_KEY,
-  aws_secret_access_key=AWS_SECRET_ACCESS_KEY
-)
+class Bucket:
 
-def upload_file(image_binary, file_name, content_type='image/jpeg'):
-    """Upload a file to an S3 bucket
+    def __init__(
+            self,
+            aws_access_key=AWS_ACCESS_KEY,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region=REGION,
+            bucket_name=BUCKET_NAME):
 
-    image_binary: Image binary file to upload
-    file_name: file_name. Will correspond to object key in S3
-    returns: aws_image_src: URL to image in S3
-     """
-
-    try:
-        response = s3.put_object(
-            Body=image_binary,
-            Bucket=BUCKET_NAME,
-            Key=file_name,
-            ContentType=content_type
+        self.bucket_name = bucket_name
+        self.region = region
+        self.client = boto3.client(
+            "s3",
+            region,
+            aws_access_key_id=aws_access_key,
+            aws_secret_access_key=aws_secret_access_key
         )
 
-        aws_image_src = f'https://{BUCKET_NAME}.s3.{REGION}.amazonaws.com/{file_name}'
+    def upload_file(self, image_binary, file_name, content_type='image/jpeg'):
+        """Upload a file to an S3 bucket
 
-    except ClientError as e:
-        logging.error(e)
-        return
+        image_binary: Image binary file to upload
+        file_name: file_name. Will correspond to object key in S3
+        returns: aws_image_src: URL to image in S3
+        """
 
-    return aws_image_src
+        try:
+            response = self.client.put_object(
+                Body=image_binary,
+                Bucket=self.bucket_name,
+                Key=file_name,
+                ContentType=content_type
+            )
 
-def get_file(file_name):
-    """Takes in a file name , returns response"""
+            aws_image_src = (f'https://{self.bucket_name}'
+                             f'.s3.{self.region}.amazonaws.com/{file_name}')
 
-    response = s3.get_object(Bucket=BUCKET_NAME, Key=file_name)
-    return response
+        except ClientError as e:
+            logging.error(e)
+            return
 
-def delete_file(file_name):
-    """Delete an image from an S3 bucket"""
+        return aws_image_src
 
-    try:
-        response = s3.delete_object(
-            Bucket=BUCKET_NAME,
-            Key=file_name
-        )
+    def get_file(self, file_name):
+        """Takes in a file name , returns response"""
 
-    except ClientError as e:
-        logging.error(e)
-        return
+        response = self.client.get_object(
+            Bucket=self.bucket_name, Key=file_name)
+        return response
+
+    def delete_file(self, file_name):
+        """Delete an image from an S3 bucket"""
+
+        try:
+            response = self.client.delete_object(
+                Bucket=self.bucket_name,
+                Key=file_name
+            )
+
+        except ClientError as e:
+            logging.error(e)
+            return
