@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 import boto3
 from botocore.exceptions import ClientError
@@ -44,10 +45,10 @@ def upload_file(image_binary, file_name, content_type='image/jpeg'):
     return aws_image_src
 
 def get_file(file_name):
-    """ Takes in a file name , returns StreamingBody object """
+    """Takes in a file name , returns response"""
 
     response = s3.get_object(Bucket=BUCKET_NAME, Key=file_name)
-    return response["Body"]
+    return response
 
 def delete_file(file_name):
     """Delete an image from an S3 bucket"""
