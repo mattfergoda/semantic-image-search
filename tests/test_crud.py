@@ -1,7 +1,6 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from pgvector.sqlalchemy
 import numpy as np
 
 from database import Base
@@ -22,7 +21,7 @@ TestingSessionLocal = sessionmaker(
 
 class TestCRUD:
     """Tests for CRUD database operations."""
-    
+
     @pytest.fixture
     def session(self):
         Base.metadata.create_all(bind=engine)
@@ -59,11 +58,23 @@ class TestCRUD:
         assert isinstance(image.embedding, np.ndarray)
         assert len(image.embedding) == EMBEDDING_SIZE
 
-    def test_get_images(self, session: Session):
-        """Test getting multiple images."""
+    def test_get_images_with_search(self, session: Session):
+        """Test getting multiple images with a search term."""
 
         image_names = [i.name for i in self.images]
         images = crud.get_images(session, search_term="foo")
+
+        for image in images:
+            assert image.name in image_names
+            assert isinstance(image.aws_image_src, str)
+            assert isinstance(image.exif_data, dict)
+            assert isinstance(image.embedding, np.ndarray)
+
+    def test_get_images_no_search(self, session: Session):
+        """Test getting multiple images without a search term."""
+
+        image_names = [i.name for i in self.images]
+        images = crud.get_images(session)
 
         for image in images:
             assert image.name in image_names
