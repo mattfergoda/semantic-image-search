@@ -10,5 +10,9 @@ pw_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def verify_admin(hashed_password):
     """Verify that the plain password hashes to the correct admin password."""
 
-    return pw_context.verify(ADMIN_PW, hashed_password)
+    if pw_context.identify(hashed_password):
+        return pw_context.verify(ADMIN_PW, hashed_password)
+    else:
+        return False
+
 
