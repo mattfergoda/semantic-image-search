@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
@@ -9,9 +11,10 @@ from clip import EMBEDDING_SIZE
 import schemas
 import crud
 
-SQLALCHEMY_TEST_DATABASE_URL = "postgresql:///semantic_pic_test"
+# Env var overridden in pytest.ini
+SQLALCHEMY_TEST_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
 
-engine = create_engine(SQLALCHEMY_TEST_DATABASE_URL)
+engine = create_engine(SQLALCHEMY_TEST_DATABASE_URI)
 
 TestingSessionLocal = sessionmaker(
     autocommit=False, 
@@ -85,6 +88,9 @@ class TestCRUD:
 
     def test_create_image(self, session: Session):
         """Test creating an image."""
+
+        # Make sure it's not there already
+        assert crud.get_image(session, "test3") == None
 
         image = schemas.ImageCreate(
             name="image3",
