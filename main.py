@@ -56,10 +56,10 @@ def get_images(
 def upload_image(
     file: UploadFile, 
     image_name: Annotated[str, Body()],
-    hashed_pw: Annotated[str, Header(alias="HTTPBearer")], 
+    admin_pw: Annotated[str, Header(alias="HTTPBearer")], 
     db: Session = Depends(get_db)):
 
-    if not auth.verify_admin(hashed_pw):
+    if not auth.verify_admin(admin_pw):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized"
@@ -88,10 +88,10 @@ def upload_image(
 @app.delete("/images/{image_name}")
 def delete_image(
     image_name: str, 
-    hashed_pw: Annotated[str, Header(alias="HTTPBearer")],
+    admin_pw: Annotated[str, Header(alias="HTTPBearer")],
     db: Session = Depends(get_db)):
     
-    if not auth.verify_admin(hashed_pw):
+    if not auth.verify_admin(admin_pw):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized"

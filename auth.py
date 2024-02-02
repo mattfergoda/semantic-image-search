@@ -1,18 +1,15 @@
 import os
 
-from passlib.context import CryptContext
+from dotenv import load_dotenv
 
-ADMIN_PW = os.environ.get("ADMIN_PW")
+load_dotenv()
 
-pw_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+ADMIN_PW = os.environ["ADMIN_PW"]
 
 
-def verify_admin(hashed_password):
-    """Verify that the plain password hashes to the correct admin password."""
+def verify_admin(pw):
+    """Verify that the incoming password is the admin password."""
 
-    if pw_context.identify(hashed_password):
-        return pw_context.verify(ADMIN_PW, hashed_password)
-    else:
-        return False
+    return pw == ADMIN_PW
 
 

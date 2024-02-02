@@ -4,18 +4,16 @@ from dateutil import parser
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from pytest import raises
 
 from main import app, get_db
 from database import Base
-from auth import pw_context
 
-HASHED_ADMIN_PW = pw_context.hash(os.environ.get("ADMIN_PW"))
+
+ADMIN_PW = os.environ["ADMIN_PW"]
 REGION = os.environ['REGION']
 BUCKET_NAME = os.environ['BUCKET_NAME']
-
-# Env var overridden in pytest.ini
 SQLALCHEMY_TEST_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
+
 TEST_IMAGES = {
     "pentax_test": "Pentax_K10D.jpg",
     "nikon_test": "Nikon_D70.jpg"
@@ -36,7 +34,6 @@ def override_get_db():
     finally:
         db.close()
 
-
 app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
@@ -53,7 +50,7 @@ def setup():
         
         client.post(
             "/images/",
-            headers={"HTTPBearer": HASHED_ADMIN_PW},
+            headers={"HTTPBearer": ADMIN_PW},
             data={"image_name": name},
             files={
                 "file": (fname, file)
@@ -176,7 +173,7 @@ def test_post_image_okay():
 
     response = client.post(
         "/images/",
-        headers={"HTTPBearer": HASHED_ADMIN_PW},
+        headers={"HTTPBearer": ADMIN_PW},
         data={"image_name": image_name},
         files={
             "file": (image_fname, file)
@@ -208,7 +205,7 @@ def test_post_image_okay():
 
     client.delete(
         f"/images/{image_name}",
-        headers={"HTTPBearer": HASHED_ADMIN_PW}
+        headers={"HTTPBearer": ADMIN_PW}
     )
 
 def test_post_dupe_image():
@@ -222,7 +219,7 @@ def test_post_dupe_image():
 
     response = client.post(
         "/images/",
-        headers={"HTTPBearer": HASHED_ADMIN_PW},
+        headers={"HTTPBearer": ADMIN_PW},
         data={"image_name": image_name},
         files={
             "file": (image_fname, file)
@@ -272,7 +269,7 @@ def test_delete_image_okay():
 
     response = client.delete(
         f"/images/{image_name}",
-        headers={"HTTPBearer": HASHED_ADMIN_PW},
+        headers={"HTTPBearer": ADMIN_PW},
     )
     data = response.json()
 
@@ -287,7 +284,7 @@ def test_delete_image_okay():
 
     client.post(
         "/images/",
-        headers={"HTTPBearer": HASHED_ADMIN_PW},
+        headers={"HTTPBearer": ADMIN_PW},
         data={"image_name": image_name},
         files={
             "file": (image_fname, file)
@@ -301,7 +298,7 @@ def test_delete_image_not_found():
     
     response = client.delete(
         f"/images/{image_name}",
-        headers={"HTTPBearer": HASHED_ADMIN_PW},
+        headers={"HTTPBearer": ADMIN_PW},
     )
     data = response.json()
 
@@ -335,7 +332,7 @@ def teardown():
         
         client.delete(
             f"/images/{name}",
-            headers={"HTTPBearer": HASHED_ADMIN_PW}
+            headers={"HTTPBearer": ADMIN_PW}
         )
 
     Base.metadata.drop_all(bind=engine)
