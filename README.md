@@ -31,8 +31,11 @@ Tests are configured to run against a test database and test S3 bucket. You will
 env =
     BUCKET_NAME=<your-test-bucket-name>
 ```
+
+## Running Tests
+To generate a coverage report, run `pytest --cov --cov-report=html:coverage`.
+
 ## TODO:
-- Add tests.
 - Add a license.
 - Add a docker file for deployment.
 - Implement logging framework.
