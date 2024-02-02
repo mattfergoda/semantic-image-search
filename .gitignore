@@ -3,6 +3,5 @@ __pycache__/
 .pytest_cache/
 coverage/
 .env
-pytest.ini
 pw
 .coverage
