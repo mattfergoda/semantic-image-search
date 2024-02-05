@@ -35,7 +35,7 @@ REGION =  <your-aws-region>
 BUCKET_NAME = <your-aws-s3-bucket-name>
 ```
 ### Running the Development Server
-- To run the dev server, run `uvicorn main:app --reload`
+- To run the dev server, run `uvicorn app.main:app --reload`
 
 ## Tests
 Tests are configured to run against a test database and test S3 bucket. You will need to:
