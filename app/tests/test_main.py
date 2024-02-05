@@ -5,8 +5,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from main import app, get_db
-from database import Base
+from app.main import app, get_db
+from app.database import Base
 
 
 ADMIN_PW = os.environ["ADMIN_PW"]
@@ -45,7 +45,7 @@ def setup():
     Base.metadata.create_all(bind=engine)
 
     for name, fname in TEST_IMAGES.items():
-        with open(f"tests/images/{fname}", "rb") as image:
+        with open(f"app/tests/images/{fname}", "rb") as image:
             file = image.read()
         
         client.post(
@@ -168,7 +168,7 @@ def test_post_image_okay():
     assert response.status_code == 404
     assert data == {"detail": "File not found"}
 
-    with open(f"tests/images/{image_fname}", "rb") as image:
+    with open(f"app/tests/images/{image_fname}", "rb") as image:
         file = image.read()
 
     response = client.post(
@@ -214,7 +214,7 @@ def test_post_dupe_image():
     image_name = "nikon_test"
     image_fname = "Nikon_D70.jpg"
 
-    with open(f"tests/images/{image_fname}", "rb") as image:
+    with open(f"app/tests/images/{image_fname}", "rb") as image:
         file = image.read()
 
     response = client.post(
@@ -237,7 +237,7 @@ def test_post_image_unauth():
     image_name = "fuji_test"
     image_fname = "Fujifilm_FinePix_E500.jpg"
 
-    with open(f"tests/images/{image_fname}", "rb") as image:
+    with open(f"app/tests/images/{image_fname}", "rb") as image:
         file = image.read()
 
     response = client.post(
@@ -279,7 +279,7 @@ def test_delete_image_okay():
     # Add the image back
     image_fname = TEST_IMAGES[image_name]
 
-    with open(f"tests/images/{image_fname}", "rb") as image:
+    with open(f"app/tests/images/{image_fname}", "rb") as image:
         file = image.read()
 
     client.post(

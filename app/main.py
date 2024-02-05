@@ -12,14 +12,14 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 
-import crud
-import models
-import schemas
-import image_utils
-import clip
-import auth
-from database import SessionLocal, engine
-from bucket import Bucket
+import app.crud as crud
+import app.models as models
+import app.schemas as schemas
+import app.image_utils as image_utils
+import app.clip as clip
+import app.auth as auth
+from app.database import SessionLocal, engine
+from app.bucket import Bucket
 
 models.Base.metadata.create_all(bind=engine)
 

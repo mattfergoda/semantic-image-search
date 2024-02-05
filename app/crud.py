@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-import schemas
-import clip
-from models import Image
+import app.schemas as schemas
+import app.clip as clip
+from app.models import Image
 
 
 def get_image(db: Session, image_name: str):

@@ -1,6 +1,6 @@
 import os
 
-from auth import verify_admin
+from app.auth import verify_admin
 
 ADMIN_PW = os.environ["ADMIN_PW"]
 

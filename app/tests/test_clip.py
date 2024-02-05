@@ -1,8 +1,8 @@
 from numpy.linalg import norm
 from numpy import isclose
 
-from bucket import Bucket
-from clip import EMBEDDING_SIZE, get_image_embedding, get_text_embedding
+from app.bucket import Bucket
+from app.clip import EMBEDDING_SIZE, get_image_embedding, get_text_embedding
 
 
 def test_get_text_embedding():
@@ -19,7 +19,7 @@ def test_get_image_embedding():
 
     bucket = Bucket()
 
-    with open("tests/images/Fujifilm_FinePix_E500.jpg", "rb") as image:
+    with open("app/tests/images/Fujifilm_FinePix_E500.jpg", "rb") as image:
         file = image.read()
         image_bytes = bytearray(file)
 

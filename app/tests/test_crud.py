@@ -5,11 +5,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 import numpy as np
 
-from database import Base
-from models import Image
-from clip import EMBEDDING_SIZE
-import schemas
-import crud
+from app.database import Base
+from app.models import Image
+from app.clip import EMBEDDING_SIZE
+import app.schemas as schemas
+import app.crud as crud
 
 # Env var overridden in pytest.ini
 SQLALCHEMY_TEST_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']

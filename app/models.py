@@ -2,8 +2,8 @@ from sqlalchemy import Column, String, JSON, DateTime, func
 from sqlalchemy.orm import mapped_column
 from pgvector.sqlalchemy import Vector
 
-from database import Base
-from clip import EMBEDDING_SIZE
+from app.database import Base
+from app.clip import EMBEDDING_SIZE
 
 
 # class User(Base):

@@ -1,9 +1,9 @@
-from image_utils import scrape_exif
+from app.image_utils import scrape_exif
 
 def test_scrape_exif():
     """Test getting exif data from an image with exif data."""
 
-    with open("tests/images/Fujifilm_FinePix_E500.jpg", "rb") as image:
+    with open("app/tests/images/Fujifilm_FinePix_E500.jpg", "rb") as image:
         exif = scrape_exif(image)
 
     assert exif == {
@@ -23,7 +23,7 @@ def test_scrape_exif():
 def test_scrape_exif_no_exif():
     """Test getting exif data from an image without exif data."""
 
-    with open("tests/images/pexels-mikhail-nilov-8297845.jpg", "rb") as image:
+    with open("app/tests/images/pexels-mikhail-nilov-8297845.jpg", "rb") as image:
         exif = scrape_exif(image)
 
     assert exif == {}

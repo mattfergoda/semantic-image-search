@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from bucket import Bucket
+from app.bucket import Bucket
 
 REGION = os.environ['REGION']
 BUCKET_NAME = os.environ['BUCKET_NAME']
@@ -17,13 +17,13 @@ class TestBucket:
 
         bucket = Bucket()
   
-        with open("tests/images/Fujifilm_FinePix_E500.jpg", "rb") as image:
+        with open("app/tests/images/Fujifilm_FinePix_E500.jpg", "rb") as image:
             file = image.read()
             image_bytes = bytearray(file)
 
         bucket.upload_file(image_bytes, "fuji_test")
 
-        with open("tests/images/Pentax_K10D.jpg", "rb") as image:
+        with open("app/tests/images/Pentax_K10D.jpg", "rb") as image:
             file = image.read()
             image_bytes = bytearray(file)
 
@@ -34,7 +34,7 @@ class TestBucket:
 
         bucket = Bucket()
        
-        with open("tests/images/Nikon_D70.jpg", "rb") as image:
+        with open("app/tests/images/Nikon_D70.jpg", "rb") as image:
             file = image.read()
             image_bytes = bytearray(file)
 
