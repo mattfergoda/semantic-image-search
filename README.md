@@ -46,8 +46,7 @@ BUCKET_NAME = <your-aws-s3-bucket-name>
 ## Running Locally with Docker Compose
 Follow steps 1 and 2 from "Running Locally with a Virtual Environment" above. Then:
 1. Make sure you have Docker installed.
-2. Run `docker compose up --build` in the root directory to build the containers and launch the development server.
-3. Go to http://0.0.0.0:8000/docs to view the Swagger doc and test out the API.
+2. Run `docker compose up --build` in the root directory to build the images and run the containers.
 
 ### Swagger Doc
 - Once the containers are running, go to http://0.0.0.0:8000/docs to view the Swagger docs. You can use this to test out the API locally. 
