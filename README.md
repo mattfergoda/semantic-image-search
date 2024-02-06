@@ -10,23 +10,24 @@ Code testing coverage is 98%.
 - [HuggingFace's instance of CLIP](https://huggingface.co/docs/transformers/model_doc/clip)
 - [AWS S3](https://aws.amazon.com/s3/) bucket for image storage
 
-## Running Locally
+## Running Locally with a Virtual Environment
 You will need to:
-- Create a virtual environment in the root of the project: `python3 -m venv venv`.
-- Activate the virtual environment: `source venv/bin/activate`
-- Install the dependencies: `pip3 install -r requirements.txt`
-- Configure an AWS S3 bucket to store images in.
-- Create a local relational database.
+1. Set up an AWS S3 bucket with appropriate permissions for an external service to make API calls to it.
+2. Specify environment variables in a `.env` file (see below).
+3. Create a virtual environment in the root of the project: `python3 -m venv venv`.
+4. Activate the virtual environment: `source venv/bin/activate`
+5. Install the dependencies: `pip3 install -r requirements.txt`
+7. Create a local relational database for storing image urls, embeddings, and metadata. Update the value of `SQLALCHEMY_DATABASE_URI` in the `.env` file accordingly.
 
 ### Environment Variables
 These are the environment variables you will need to specify in a `.env` file:
 
 ```
 # Database
-SQLALCHEMY_DATABASE_URI = <your-database-uri>
+SQLALCHEMY_DATABASE_URI = <your-database-uri> # postgresql://postgres:password@db:5433/semantic_pic if using this project's compose.yaml values
 
 # App auth
-ADMIN_PW = <strong-admin-password>
+ADMIN_PW = <strong-admin-password> # For authenticating the protected POST and DELETE routes via HTTPBearer header.
 
 # AWS
 AWS_ACCESS_KEY = <your-aws-access-key>
@@ -34,14 +35,27 @@ AWS_SECRET_ACCESS_KEY = <your-aws-secret-access-key>
 REGION =  <your-aws-region>
 BUCKET_NAME = <your-aws-s3-bucket-name>
 ```
+
 ### Running the Development Server
 - To run the dev server, run `uvicorn app.main:app --reload`
 
+### Swagger Doc
+- Once the dev server is running, go to localhost:8000/docs to view the Swagger docs. You can use this to test out the API locally. 
+
+## Running Locally with Docker Compose
+Follow steps 1 and 2 from "Running Locally with a Virtual Environment" above. Then:
+1. Make sure you have Docker installed.
+2. Run `docker compose up --build` in the root directory to build the containers and launch the development server.
+3. Go to http://0.0.0.0:8000/docs to view the Swagger doc and test out the API.
+
+### Swagger Doc
+- Once the containers are running, go to http://0.0.0.0:8000/docs to view the Swagger docs. You can use this to test out the API locally. 
+
 ## Tests
-Tests are configured to run against a test database and test S3 bucket. You will need to:
-- Configure a test S3 bucket in AWS.
-- Create a test database locally. 
-- Create a `pytest.ini` file in the root of the project. This will contain an environment variable with the name of your _test_ S3 bucket to override the production bucket name in the `.env` file:
+Tests are configured to run against a test database and test S3 bucket. To run the tests, you will need to:
+- Configure a test S3 bucket in AWS with appropriate permissions for an external service to make API calls to it.
+- Create a test relational database locally. 
+- Update the `pytest.ini` file in the root of the project. This contains environment variables that, during testing, will override those specified in the `.env`:
     ```
     [pytest]
     env =
@@ -50,9 +64,4 @@ Tests are configured to run against a test database and test S3 bucket. You will
     ```
 
 ### Running Tests
-To run all tests and generate a coverage report, run `pytest --cov --cov-report=html:coverage`.
-
-## TODO:
-- Add a license.
-- Add a docker file for deployment.
-- Implement logging framework.
+To run all tests and generate a coverage report, run `pytest --cov --cov-report=html:coverage` in the root of the project if using a virtual environment, or inside the API container if using Docker.
