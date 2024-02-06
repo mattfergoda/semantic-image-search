@@ -1,3 +1,4 @@
+import os
 from typing import Annotated
 
 from fastapi import (
@@ -10,7 +11,9 @@ from fastapi import (
     UploadFile,  
     status
 )
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from dotenv import load_dotenv
 
 import app.crud as crud
 import app.models as models
@@ -23,7 +26,19 @@ from app.bucket import Bucket
 
 models.Base.metadata.create_all(bind=engine)
 
+load_dotenv()
+
+ALLOWED_ORIGINS = os.environ['ALLOWED_ORIGINS']
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 bucket = Bucket()
 
