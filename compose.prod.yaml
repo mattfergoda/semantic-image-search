@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  server:
+    build: .
+    depends_on:
+      - db
+    container_name: simsearch
+    ports:
+      - '8000:8000'
+    restart: "no"
+    env_file: .env
+    
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 512M
+  
+  db:
+      image: ankane/pgvector
+      volumes:
+        - postgres_data:/var/lib/postgresql/data/
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      command: postgres -p 5433
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=semantic_pic
+
+volumes:
+  postgres_data:
