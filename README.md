@@ -18,6 +18,7 @@ You will need to:
 4. Activate the virtual environment: `source venv/bin/activate`
 5. Install the dependencies: `pip3 install -r requirements.txt`
 7. Create a local relational database for storing image urls, embeddings, and metadata. Update the value of `SQLALCHEMY_DATABASE_URI` in the `.env` file accordingly.
+8. Enable the pgvector extension in the database by connecting to it and running `CREATE EXTENSION vector;`
 
 ### Environment Variables
 These are the environment variables you will need to specify in a `.env` file:
@@ -54,7 +55,7 @@ Follow steps 1 and 2 from "Running Locally with a Virtual Environment" above. Th
 ## Tests
 Tests are configured to run against a test database and test S3 bucket. To run the tests, you will need to:
 - Configure a test S3 bucket in AWS with appropriate permissions for an external service to make API calls to it.
-- Create a test relational database locally. 
+- Create a test relational database locally. Enable the pgvector extension in the database by connecting to it and running `CREATE EXTENSION vector;`
 - Update the `pytest.ini` file in the root of the project. This contains environment variables that, during testing, will override those specified in the `.env`:
     ```
     [pytest]
