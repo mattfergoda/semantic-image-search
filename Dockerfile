@@ -1,10 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
+# Container image for the API
 
 ARG PYTHON_VERSION=3.11.4
 FROM python:${PYTHON_VERSION}-slim as base
@@ -18,14 +14,17 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /code
 
+# Need this to avoid error with egg_info dependency.
 RUN apt-get update \
     && apt-get -y install libpq-dev gcc \
     && pip install psycopg2
 
+# Copy this first to take advantage of caching.
 COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
+# Copy this after since it changes more frequently.
 COPY ./app /code/app
 
 # Run the application.
