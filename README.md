@@ -28,13 +28,16 @@ These are the environment variables you will need to specify in a `.env` file:
 SQLALCHEMY_DATABASE_URI = <your-database-uri> # postgresql://postgres:password@db:5433/semantic_pic if using this project's compose.yaml values
 
 # App auth
-ADMIN_PW = <strong-admin-password> # For authenticating the protected POST and DELETE routes via HTTPBearer header.
+ADMIN_PW = <strong-admin-password> # For authenticating the protected POST and DELETE routes via Authorization header.
 
 # AWS
-AWS_ACCESS_KEY = <your-aws-access-key>
-AWS_SECRET_ACCESS_KEY = <your-aws-secret-access-key>
-REGION =  <your-aws-region>
-BUCKET_NAME = <your-aws-s3-bucket-name>
+AWS_ACCESS_KEY = <your aws access key>
+AWS_SECRET_ACCESS_KEY = <your aws secret access key>
+REGION =  <your aws region>
+BUCKET_NAME = <your aws s3 bucket name>
+
+# CORS
+ALLOWED_ORIGINS=[<list of allowed origins>]
 ```
 
 ### Running the Development Server
