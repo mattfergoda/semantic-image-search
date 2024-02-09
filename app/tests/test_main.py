@@ -50,7 +50,7 @@ def setup():
         
         client.post(
             "/images/",
-            headers={"HTTPBearer": ADMIN_PW},
+            headers={"Authorization": "Bearer " + ADMIN_PW},
             data={"image_name": name},
             files={
                 "file": (fname, file)
@@ -173,7 +173,7 @@ def test_post_image_okay():
 
     response = client.post(
         "/images/",
-        headers={"HTTPBearer": ADMIN_PW},
+        headers={"Authorization": "Bearer " + ADMIN_PW},
         data={"image_name": image_name},
         files={
             "file": (image_fname, file)
@@ -205,7 +205,7 @@ def test_post_image_okay():
 
     client.delete(
         f"/images/{image_name}",
-        headers={"HTTPBearer": ADMIN_PW}
+        headers={"Authorization": "Bearer " + ADMIN_PW}
     )
 
 def test_post_dupe_image():
@@ -219,7 +219,7 @@ def test_post_dupe_image():
 
     response = client.post(
         "/images/",
-        headers={"HTTPBearer": ADMIN_PW},
+        headers={"Authorization": "Bearer " + ADMIN_PW},
         data={"image_name": image_name},
         files={
             "file": (image_fname, file)
@@ -242,7 +242,7 @@ def test_post_image_unauth():
 
     response = client.post(
         "/images/",
-        headers={"HTTPBearer": "foo"},
+        headers={"Authorization": "Bearer foo"},
         data={"image_name": image_name},
         files={
             "file": (image_fname, file)
@@ -269,7 +269,7 @@ def test_delete_image_okay():
 
     response = client.delete(
         f"/images/{image_name}",
-        headers={"HTTPBearer": ADMIN_PW},
+        headers={"Authorization": "Bearer " + ADMIN_PW},
     )
     data = response.json()
 
@@ -284,7 +284,7 @@ def test_delete_image_okay():
 
     client.post(
         "/images/",
-        headers={"HTTPBearer": ADMIN_PW},
+        headers={"Authorization": "Bearer " + ADMIN_PW},
         data={"image_name": image_name},
         files={
             "file": (image_fname, file)
@@ -298,7 +298,7 @@ def test_delete_image_not_found():
     
     response = client.delete(
         f"/images/{image_name}",
-        headers={"HTTPBearer": ADMIN_PW},
+        headers={"Authorization": "Bearer " + ADMIN_PW},
     )
     data = response.json()
 
@@ -320,7 +320,7 @@ def test_delete_image_unauth():
 
     response = client.delete(
         f"/images/{image_name}",
-        headers={"HTTPBearer": "foo"},
+        headers={"Authorization": "Bearer foo"},
     )
     data = response.json()
 
@@ -332,7 +332,7 @@ def teardown():
         
         client.delete(
             f"/images/{name}",
-            headers={"HTTPBearer": ADMIN_PW}
+            headers={"Authorization": "Bearer " + ADMIN_PW}
         )
 
     Base.metadata.drop_all(bind=engine)

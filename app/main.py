@@ -12,6 +12,7 @@ from fastapi import (
     status
 )
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
@@ -39,6 +40,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+security = HTTPBearer()
 
 bucket = Bucket()
 
@@ -71,10 +74,10 @@ def get_images(
 def upload_image(
     file: UploadFile, 
     image_name: Annotated[str, Body()],
-    admin_pw: Annotated[str, Header(alias="HTTPBearer")], 
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)], 
     db: Session = Depends(get_db)):
 
-    if not auth.verify_admin(admin_pw):
+    if not auth.verify_admin(credentials.credentials):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized"
@@ -103,10 +106,10 @@ def upload_image(
 @app.delete("/images/{image_name}")
 def delete_image(
     image_name: str, 
-    admin_pw: Annotated[str, Header(alias="HTTPBearer")],
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)], 
     db: Session = Depends(get_db)):
     
-    if not auth.verify_admin(admin_pw):
+    if not auth.verify_admin(credentials.credentials):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized"
