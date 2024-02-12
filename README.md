@@ -3,6 +3,8 @@ A RESTful API that allows for quickly searching images based on their content us
 
 Code testing coverage is 98%.
 
+[Live Demo](https://demo.simsearch.mattfergoda.me/)
+
 ## Technology Stack
 - [FastAPI](https://fastapi.tiangolo.com/)
 - PostgreSQL with [pgvector](https://github.com/pgvector/pgvector) as a vector index for storing and comparing embeddings.
@@ -37,7 +39,7 @@ REGION =  <your aws region>
 BUCKET_NAME = <your aws s3 bucket name>
 
 # CORS
-ALLOWED_ORIGINS=[<list of allowed origins>]
+ALLOWED_ORIGINS=[<list>, <of>, <allowed>, <origins>]
 ```
 
 ### Running the Development Server
@@ -67,4 +69,5 @@ Tests are configured to run against a test database and test S3 bucket. To run t
     ```
 
 ### Running Tests
-To run all tests and generate a coverage report, run `pytest --cov --cov-report=html:coverage` in the root of the project if using a virtual environment, or inside the API container if using Docker.
+To run all tests, run `pytest` in the root directory inside the virtual environment or running Docker container.
+To run all tests and generate a coverage report, run `pytest --cov --cov-report=html:coverage`.
